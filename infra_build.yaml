@@ -49,4 +49,4 @@ steps:
       - '-c'
       - |
         cd infrac
-        terraform plan -var 'projectid={_PROJECT_ID}'
+        terraform plan -var 'projectid=${_PROJECT_ID}'
