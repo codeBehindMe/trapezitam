@@ -40,5 +40,6 @@ steps:
     args:
       - '-c'
       - |
+        projectid=${_PROJECT_ID}
         cd infrac/tfstate
         terraform init
