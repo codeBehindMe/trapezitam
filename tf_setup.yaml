@@ -33,3 +33,8 @@ steps:
         echo "***************************"
         echo "$BRANCH_NAME"
         echo "***************************"
+
+  - id: 'chdir'
+    name: 'hashicorp/terraform:0.11.14'
+    entrypoint: sh
+    args: ['cd','infrac/tfstate']
