@@ -40,3 +40,5 @@ steps:
       - '-c'
       - |
         projectid=${_PROJECT_ID}
+        cd infrac
+        terraform init
