@@ -34,7 +34,7 @@ steps:
         echo "$BRANCH_NAME"
         echo "***************************"
 
-  - id: 'chdir'
+  - id: 'Initialise terraform'
     name: 'hashicorp/terraform:0.12.2'
     entrypoint: sh
     args:
