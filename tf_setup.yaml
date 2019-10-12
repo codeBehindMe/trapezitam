@@ -23,6 +23,9 @@
 
 # Sets up the terraform backend.
 
+# Vars
+TF_RUNNER_NAME: &tfrunner hashicorp/terraform:0.12.2
+
 steps:
   - id: 'branch name'
     name: 'alpine'
@@ -35,7 +38,7 @@ steps:
         echo "***************************"
 
   - id: 'Initialise terraform'
-    name: 'hashicorp/terraform:0.12.2'
+    name: *tfrunner
     entrypoint: sh
     args:
       - '-c'
@@ -43,3 +46,12 @@ steps:
         projectid=${_PROJECT_ID}
         cd infrac/tfstate
         terraform init
+  - id: Terraform plan
+    name: *tfrunner
+    entrypoint: sh
+    args:
+      - '-c'
+      - |
+        projectid=${_PROJECT_ID}
+        cd infrac/tfstate
+        terraform plan
