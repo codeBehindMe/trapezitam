@@ -42,3 +42,11 @@ steps:
         projectid=${_PROJECT_ID}
         cd infrac
         terraform init -backend-config "bucket=${_PROJECT_ID}-tfstate"
+  - id: 'Terraform plan'
+    name: 'hashicorp/terraform:0.12.2'
+    entrypoint: sh
+    args:
+      - '-c'
+      - |
+        cd infrac
+        terraform plan -var 'projectid={_PROJECT_ID}'
