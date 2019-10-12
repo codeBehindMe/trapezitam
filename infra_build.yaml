@@ -50,3 +50,11 @@ steps:
       - |
         cd infrac
         terraform plan -var 'projectid=${_PROJECT_ID}'
+  - id: Terraform build
+    name: hashicorp/terraform:0.12.2
+    entrypoint: sh
+    args:
+      - '-c'
+      - |
+        cd infrac
+        terraform apply --auto-approve -var 'projectid=${_PROJECT_ID}'
