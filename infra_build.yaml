@@ -33,13 +33,3 @@ steps:
         echo "*************************"
         echo "$BRANCH_NAME"
         echo "*************************"
-  - id: Initialise Terraform
-    name: hashicorp/terraform:0.12.2
-    entrypoint: sh
-    args:
-      -c
-      - |
-        projectid=${_PROJECT_ID}
-        cd infrac
-        terraform init
-
