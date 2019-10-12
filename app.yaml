@@ -27,7 +27,7 @@ threadsafe: yes
 inbound_services:
   - mail
 
-hanlders:
+handlers:
   - url: /_ah/mail/.+
     script: handle_incoming_mail.app
     login: admin
