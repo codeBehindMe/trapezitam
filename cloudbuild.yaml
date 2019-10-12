@@ -1,0 +1,11 @@
+# Builds and deploys the application
+steps:
+  - id: 'Install packages'
+    name: 'docker.io/library/python:2.7'
+    args: ['pip','install','-t','/workspace/lib','-r','/workspace/requirements.txt']
+  - id: 'Run tests'
+    name: 'docker.io/library/python:2.7'
+    args: ['pytest','.']
+  - id: 'Deploy application'
+    name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app','deploy']
