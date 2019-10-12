@@ -23,7 +23,6 @@
 
 terraform {
   backend "gcs" {
-    bucket = "dev-trapezitam-tfstate"
     prefix= "terraform/state"
   }
 }

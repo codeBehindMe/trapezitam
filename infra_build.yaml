@@ -41,4 +41,4 @@ steps:
       - |
         projectid=${_PROJECT_ID}
         cd infrac
-        terraform init
+        terraform init -backend-config "bucket=${_PROJECT_ID}-tfstate"
