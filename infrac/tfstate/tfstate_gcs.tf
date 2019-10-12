@@ -23,9 +23,10 @@
 
 # Creates an area for tfstate inside google cloud platform.
 
-resource "google_storage_bucket" "tfstate-bucket" {
+resource "google_storage_bucket" "tfstate" {
   name = "${var.projectid}-tfstate"
-  location = "australia-southeast"
+  storage_class = "REGIONAL"
+  location = "australia-southeast1"
   project = var.projectid
 }
 
