@@ -4,8 +4,11 @@ steps:
     name: 'docker.io/library/python:2.7'
     args: ['pip','install','-t','/workspace/lib','-r','/workspace/requirements.txt']
   - id: 'Run tests'
+    args:
+      - '-c'
+      - 'pip install -r requirements.txt'
+      - 'pytest .'
     name: 'docker.io/library/python:2.7'
-    args: ['python','-m','pytest','.']
   - id: 'Deploy application'
     name: 'gcr.io/cloud-builders/gcloud'
     args: ['app','deploy']
