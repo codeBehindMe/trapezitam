@@ -22,11 +22,8 @@
 */
 
 terraform {
-  backend "gcs" {}
-}
-data "terraform_remote_state" "gcsbackenddef" {
-  backend = "gcs"
-  config {
-    bucket = "${var.projectid}-tfstate"
+  backend "gcs" {
+    bucket = "dev-trapezitam-tfstate"
+    prefix= "terraform/state"
   }
 }
