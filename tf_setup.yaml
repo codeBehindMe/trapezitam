@@ -23,7 +23,7 @@
 
 # Sets up the terraform backend.
 
-
+# FIXME: Cloud Build definition is unclean
 steps:
   - id: 'branch name'
     name: 'alpine'
