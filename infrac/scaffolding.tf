@@ -22,7 +22,7 @@
 */
 
 terraform {
-
+  backend "gcs" {}
 }
 data "terraform_remote_state" "gcsbackenddef" {
   backend = "gcs"
