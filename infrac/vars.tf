@@ -27,6 +27,6 @@ variable "projectid" {
 
 variable "appregion" {
   type = string
-  default = "australia-southeast"
+  default = "australia-southeast1"
 }
 
