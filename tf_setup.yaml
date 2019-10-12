@@ -51,4 +51,4 @@ steps:
       - '-c'
       - |
         cd infrac/tfstate
-        terraform plan projectid=${_PROJECT_ID}
+        terraform plan -var 'projectid=${_PROJECT_ID}'
