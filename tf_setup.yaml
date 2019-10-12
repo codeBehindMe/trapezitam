@@ -59,4 +59,4 @@ steps:
       - '-c'
       - |
         cd infrac/tfstate
-        terraform apply -var 'projectid=${_PROJECT_ID}'
+        terraform apply --auto-approve -var 'projectid=${_PROJECT_ID}'
