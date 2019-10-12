@@ -50,6 +50,5 @@ steps:
     args:
       - '-c'
       - |
-        projectid=${_PROJECT_ID}
         cd infrac/tfstate
-        terraform plan
+        terraform plan projectid=${_PROJECT_ID}
