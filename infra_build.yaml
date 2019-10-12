@@ -24,11 +24,11 @@
 # Builds the infrastructure
 
 steps:
-  - id: Log branch name
-    name: alpine
-    entrypoint: sh
+  - id: 'Log branch name'
+    name: 'alpine'
+    entrypoint: 'sh'
     args:
-      - c
+      - '-c'
       - |
         echo "*************************"
         echo "$BRANCH_NAME"
