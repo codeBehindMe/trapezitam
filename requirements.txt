@@ -3,3 +3,4 @@ beautifulsoup4==4.8.0
 pyyaml
 requests
 urllib3
+pytest
