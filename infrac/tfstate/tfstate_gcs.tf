@@ -26,5 +26,6 @@
 resource "google_storage_bucket" "tfstate-bucket" {
   name = "${var.projectid}-tfstate"
   location = "australia-southeast"
+  project = var.projectid
 }
 
