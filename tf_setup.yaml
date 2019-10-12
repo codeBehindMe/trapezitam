@@ -23,8 +23,6 @@
 
 # Sets up the terraform backend.
 
-# Vars
-tfname: &tfname hashicorp/terraform:0.12.2
 
 steps:
   - id: 'branch name'
@@ -38,7 +36,7 @@ steps:
         echo "***************************"
 
   - id: 'Initialise terraform'
-    name: *tfname
+    name: hashicorp/terraform:0.12.2
     entrypoint: sh
     args:
       - '-c'
@@ -47,7 +45,7 @@ steps:
         cd infrac/tfstate
         terraform init
   - id: Terraform plan
-    name: *tfname
+    name: hashicorp/terraform:0.12.2
     entrypoint: sh
     args:
       - '-c'
