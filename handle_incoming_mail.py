@@ -40,6 +40,7 @@ class HandleIncomingMail(InboundMailHandler):
         logging.info("Received message from: " + mail_message.sender)
 
         html_bodies = mail_message.bodies('text/html')
+        logging.info(html_bodies)
 
         for _, b in html_bodies:
             logging.info(b.decode())
