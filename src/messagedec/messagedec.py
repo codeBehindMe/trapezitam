@@ -42,7 +42,7 @@ def heuristic_string_subsetter(string):
 class MessageDeconstructor(object):
 
     def __init__(self, html_email_body):
-        self.soup = BeautifulSoup(html_email_body)
+        self.soup = html_email_body
         self.soup_string = str(self.soup).lower()
 
     def get_string_of_interest(self):
