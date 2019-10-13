@@ -19,15 +19,31 @@
 # along with trapezitam.  
 # If not, see <https://www.gnu.org/licenses/>.
 
-from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 import logging
+import urllib2
+
 import webapp2
+from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
+
+from src.messagedec.messagedec import MessageDeconstructor
+from src.configuration_manager.configuration_manager import \
+    ConfigurationManager
+
+APP_CONFIG_FILE_PATH = 'app_config.yaml'
+
+app_config = ConfigurationManager(APP_CONFIG_FILE_PATH)
 
 
 class HandleIncomingMail(InboundMailHandler):
 
     def receive(self, mail_message):
         logging.info("Received message from: " + mail_message.sender)
+
+        html_bodies = mail_message.bodies('text/html')
+
+        for _, b in html_bodies:
+            payload = MessageDeconstructor(b.decode()).get_string_of_interest()
+            logging.debug("Received payload: " + payload)
 
 
 app = webapp2.WSGIApplication([HandleIncomingMail.mapping()], debug=True)
