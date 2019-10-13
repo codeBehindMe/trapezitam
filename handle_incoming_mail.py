@@ -42,6 +42,7 @@ class HandleIncomingMail(InboundMailHandler):
         html_bodies = mail_message.bodies('text/html')
 
         for _, b in html_bodies:
+            logging.info(b.decode())
             payload = MessageDeconstructor(b.decode()).get_string_of_interest()
             logging.info("Received payload: " + payload)
 
