@@ -43,7 +43,7 @@ class HandleIncomingMail(InboundMailHandler):
 
         for _, b in html_bodies:
             payload = MessageDeconstructor(b.decode()).get_string_of_interest()
-            logging.debug("Received payload: " + payload)
+            logging.info("Received payload: " + payload)
 
 
 app = webapp2.WSGIApplication([HandleIncomingMail.mapping()], debug=True)
