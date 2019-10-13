@@ -39,7 +39,7 @@ class HandleIncomingMail(InboundMailHandler):
     def receive(self, mail_message):
         logging.info("Received message from: " + mail_message.sender)
 
-        html_bodies = mail_message.bodies('text/html')
+        html_bodies = mail_message.bodies('text/plain')
         logging.info(''.join([x for x in html_bodies]))
 
         for _, b in html_bodies:
