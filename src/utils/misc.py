@@ -31,7 +31,6 @@ def unicode_to_utf8_safe(uc_str):
     """
     # Replace xa0
 
-    uc_str = unicodedata.normalize('NFC', uc_str)
-    uc_str = uc_str.replace(u'\xa0', u' ')
+    uc_str = unicodedata.normalize('NFKC', uc_str)
 
     return str(uc_str)
