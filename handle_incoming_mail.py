@@ -39,11 +39,14 @@ class HandleIncomingMail(InboundMailHandler):
     def receive(self, mail_message):
         logging.info("Received message from: " + mail_message.sender)
 
-        html_bodies = mail_message.bodies('text/plain')
+        html_bodies = mail_message.bodies('text')
 
+        all_string = ""
         for _, b in html_bodies:
-            payload = MessageDeconstructor(b.decode()).get_string_of_interest()
-            logging.info("Received payload: " + payload)
+            all_string = all_string.join(str(b.decode()))
+
+        payload = MessageDeconstructor(all_string).get_string_of_interest()
+        logging.info("Received payload: " + payload)
 
 
 app = webapp2.WSGIApplication([HandleIncomingMail.mapping()], debug=True)
