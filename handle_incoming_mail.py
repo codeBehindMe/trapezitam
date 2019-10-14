@@ -24,6 +24,7 @@ import urllib2
 
 import webapp2
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
+from src.utils.misc import unicode_to_utf8_safe
 
 from src.messagedec.messagedec import MessageDeconstructor
 from src.configuration_manager.configuration_manager import \
@@ -43,7 +44,7 @@ class HandleIncomingMail(InboundMailHandler):
 
         all_string = ""
         for _, b in html_bodies:
-            all_string = all_string.join(str(b.decode()))
+            all_string = all_string.join(unicode_to_utf8_safe(b.decode()))
 
         payload = MessageDeconstructor(all_string).get_string_of_interest()
         logging.info("Received payload: " + payload)
