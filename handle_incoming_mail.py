@@ -20,7 +20,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 import logging
-import urllib2
+from src.net.http import post
 
 import webapp2
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
@@ -32,7 +32,7 @@ from src.configuration_manager.configuration_manager import \
 
 APP_CONFIG_FILE_PATH = 'app_config.yaml'
 
-app_config = ConfigurationManager(APP_CONFIG_FILE_PATH)
+app_config = ConfigurationManager(APP_CONFIG_FILE_PATH).get_app_configuration()
 
 
 class HandleIncomingMail(InboundMailHandler):
@@ -45,11 +45,21 @@ class HandleIncomingMail(InboundMailHandler):
         all_string = ""
         for _, b in html_bodies:
             all_string = all_string.join(unicode_to_utf8_safe(b.decode()))
-
         logging.debug("Received email with body:\n" + all_string)
-        payload = MessageDeconstructor(all_string).get_string_of_interest()
 
-        logging.info("Extracted payload: " + payload)
+        logging.info("Extracting transaction text from email.")
+        t_text = MessageDeconstructor(all_string).get_string_of_interest()
+        logging.debug("Extracted payload: " + t_text)
+
+        payload = {"TransactionText": t_text}
+        logging.info("Sending transaction text for entity extraction")
+
+        gt_func_url = app_config['gtfurl']
+        logging.debug(
+            "Sending payload: " + gt_func_url)
+        tx_o = post(gt_func_url, payload)
+
+        logging.debug("Received response: " + str(tx_o))
 
 
 app = webapp2.WSGIApplication([HandleIncomingMail.mapping()], debug=True)
