@@ -53,9 +53,11 @@ class HandleIncomingMail(InboundMailHandler):
 
         payload = {"TransactionText": t_text}
         logging.info("Sending transaction text for entity extraction")
+
+        gt_func_url = app_config['gtfurl']
         logging.debug(
-            "Sending payload: " + app_config['gtfurl'])
-        tx_o = post(app_config['gtfurl'], payload)
+            "Sending payload: " + gt_func_url)
+        tx_o = post(gt_func_url, payload)
 
         logging.debug("Received response: " + str(tx_o))
 
