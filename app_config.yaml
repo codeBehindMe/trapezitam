@@ -1,6 +1,6 @@
-dev:
-  blah: x
-test:
-  blah: y
+dev: &dev
+  gtfurl: https://asia-east2-test-trapezitam.cloudfunctions.net/GetTransaction
+test: &test
+  <<: *dev
 prod:
-  blah: z
+  <<: *test
