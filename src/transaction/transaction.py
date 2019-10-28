@@ -19,20 +19,53 @@
 # along with trapezitam.  
 # If not, see <https://www.gnu.org/licenses/>.
 
+import json
+from numbers import Number
+
 
 def from_dictionary(d):
     def wrapper():
         return d
 
+    return wrapper
+
+
+def from_json_string(json_string):
+    def wrapper():
+        return json.loads(json_string)
+
+    return wrapper
+
 
 class Transaction:
 
-    def __init__(self, *args, **kwargs):
-        self.d = args[0]()
+    def __init__(self, getter, *args, **kwargs):
+        self.d = getter()
+
+    @staticmethod
+    def _is_zero_value(obj):
+        """
+        Check's that the object is a zero value.
+
+        Zero values are a check to see if the transactions fields has
+        reasonable amounts. A zero value constitutes of a literal zero for
+        number types or empty strings for string types.
+
+        :param obj: object to check.
+        :return: boolean indicated if it's a zero value or not.
+        """
+        if isinstance(obj, basestring):
+            if len(obj) == 0:
+                return True
+        if isinstance(obj, Number):
+            if obj == 0:
+                return True
+        return False
 
     def validate(self):
         """
         Make sure it's a valid transaction.
         :return:
         """
-        pass
+        if sum([self._is_zero_value(v) for _, v in self.d.iteritems()]) > 1:
+            raise ValueError("Invalid transaction")
