@@ -30,4 +30,4 @@ def post(url, data):
     :return:
     """
 
-    return requests.post(url, data)
+    return requests.post(url, json=data)
