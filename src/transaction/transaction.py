@@ -21,6 +21,7 @@
 
 import json
 from numbers import Number
+from src.logging_manager.logging_manager import app_logger
 
 
 def from_dictionary(d):
@@ -68,4 +69,5 @@ class Transaction:
         :return:
         """
         if sum([self._is_zero_value(v) for _, v in self.d.iteritems()]) > 1:
+            app_logger.error("Found two or more items with zero values")
             raise ValueError("Invalid transaction")
