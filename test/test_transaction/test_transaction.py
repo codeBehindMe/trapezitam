@@ -42,7 +42,8 @@ def data():
 
 @pytest.fixture(scope='module')
 def post_result():
-    yield '{"TransactionVersion":"transactionv3","Location":"home","Amount":"$10","NumericAmount":10,"TxNotifyUnixEpoch":1572256352}\n'
+    yield """{"TransactionVersion":"transactionv3","Location":"home","Amount":
+    "$10","NumericAmount":10,"TxNotifyUnixEpoch":1572256352}\n"""
 
 
 @pytest.mark.usefixtures('app_config')
@@ -61,8 +62,8 @@ class TestTransaction:
         :return:
         """
         test_dict = {"TransactionVersion": "transactionv3",
-           "Location": "", "Amount": "", "NumericAmount": 10.00,
-           "TxNotifyUnixEpoch": 1231231}
+                     "Location": "", "Amount": "", "NumericAmount": 10.00,
+                     "TxNotifyUnixEpoch": 1231231}
 
         with pytest.raises(ValueError):
             Transaction(from_dictionary(test_dict)).validate()
