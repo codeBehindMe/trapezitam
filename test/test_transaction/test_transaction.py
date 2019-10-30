@@ -19,7 +19,6 @@
 # along with trapezitam.  
 # If not, see <https://www.gnu.org/licenses/>.
 
-from src.net.http import post
 from src.transaction.transaction import Transaction
 from src.transaction.transaction import from_json_string
 from src.transaction.transaction import from_dictionary
@@ -55,7 +54,7 @@ class TestTransaction:
                     u"NumericAmount": 10, u"TxNotifyUnixEpoch": 1572256352}
         assert from_json_string(post_result)() == expected
 
-    def test_transacion_is_invalid_when_two_keys_are_null(self, post_result):
+    def test_transacion_is_invalid_when_two_keys_are_null(self):
         """
         Test to see if validation works.
         # FIXME: Ill defined test.
