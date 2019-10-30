@@ -20,6 +20,9 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 from src.net.http import post
+from src.transaction.transaction import Transaction
+from src.transaction.transaction import from_json_string
+from src.transaction.transaction import from_dictionary
 import pytest
 import yaml
 
@@ -38,13 +41,29 @@ def data():
            "TxNotifyUnixEpoch": 1231231}
 
 
+@pytest.fixture(scope='module')
+def post_result():
+    yield '{"TransactionVersion":"transactionv3","Location":"home","Amount":"$10","NumericAmount":10,"TxNotifyUnixEpoch":1572256352}\n'
+
+
 @pytest.mark.usefixtures('app_config')
 class TestTransaction:
 
-    def test_validate(self, app_config):
+    def test_from_json_string(self, post_result):
+        expected = {u"TransactionVersion": u"transactionv3",
+                    u"Location": u"home", u"Amount": u"$10",
+                    u"NumericAmount": 10, u"TxNotifyUnixEpoch": 1572256352}
+        assert from_json_string(post_result)() == expected
+
+    def test_transacion_is_invalid_when_two_keys_are_null(self, post_result):
         """
         Test to see if validation works.
         # FIXME: Ill defined test.
         :return:
         """
-        res = post(app_config['gtfurl'], )
+        test_dict = {"TransactionVersion": "transactionv3",
+           "Location": "", "Amount": "", "NumericAmount": 10.00,
+           "TxNotifyUnixEpoch": 1231231}
+
+        with pytest.raises(ValueError):
+            Transaction(from_dictionary(test_dict)).validate()
