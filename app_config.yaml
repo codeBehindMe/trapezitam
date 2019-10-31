@@ -1,5 +1,6 @@
 dev: &dev
   gtfurl: https://asia-east2-test-trapezitam.cloudfunctions.net/GetTransaction
+  stfurl: https://asia-east2-test-trapezitam.cloudfunctions.net/SaveTransaction
 test: &test
   <<: *dev
 prod:
