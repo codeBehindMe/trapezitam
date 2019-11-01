@@ -34,3 +34,4 @@ handlers:
 libraries:
   - name: ssl
     version: latest
+instance_class: F2
