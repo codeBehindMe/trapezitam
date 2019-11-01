@@ -31,3 +31,6 @@ handlers:
   - url: /_ah/mail/.+
     script: handle_incoming_mail.app
     login: admin
+libraries:
+  - name: ssl
+    version: latest
