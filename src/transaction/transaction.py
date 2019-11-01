@@ -71,3 +71,6 @@ class Transaction:
         if sum([self._is_zero_value(v) for _, v in self.d.iteritems()]) > 1:
             app_logger.error("Found two or more items with zero values")
             raise ValueError("Invalid transaction")
+
+    def __str__(self):
+        return str(self.d)

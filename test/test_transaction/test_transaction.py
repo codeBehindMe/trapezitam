@@ -67,3 +67,18 @@ class TestTransaction:
 
         with pytest.raises(ValueError):
             Transaction(from_dictionary(test_dict)).validate()
+
+    def test_stringify_transaction(self):
+        """
+        Check's that the string representation of the transaction object is as
+        expected.
+        :return:
+        """
+        test_dict = {"TransactionVersion": "transactionv3",
+                     "Location": "", "Amount": "", "NumericAmount": 10.00,
+                     "TxNotifyUnixEpoch": 1231231}
+        expected = str(test_dict)
+
+        tx = Transaction(from_dictionary(test_dict))
+
+        assert str(tx) == expected
