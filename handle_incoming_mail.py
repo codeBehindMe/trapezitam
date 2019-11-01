@@ -69,9 +69,17 @@ class HandleIncomingMail(InboundMailHandler):
 
         try:
             t.validate()
+            app_logger.info("Send transaction to be saved in database")
+            st_func_url = app_config['stfurl']
+
+            st_res = post(st_func_url, t)
+            if st_res.status_code != 200:
+                app_logger.error(
+                    "Error when inserting transaction to db: {0}".format(
+                        st_res.content))
+            app_logger.info("Successfully saved transaction to database")
         except ValueError as v:
-            app_logger.error("Invalid transaction")
-            raise v
+            app_logger.error("Invalid Transaction {0}".format(str(t)))
 
 
 app = webapp2.WSGIApplication([HandleIncomingMail.mapping()], debug=True)
