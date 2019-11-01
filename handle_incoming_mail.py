@@ -62,9 +62,9 @@ class HandleIncomingMail(InboundMailHandler):
             "Sending payload: " + gt_func_url)
 
         tx_o = post(gt_func_url, payload)
-        app_logger.debug("Received response: " + str(tx_o))
+        app_logger.debug("Received response: " + str(tx_o.content))
 
-        t = Transaction(from_json_string(tx_o))
+        t = Transaction(from_json_string(tx_o.content))
         app_logger.debug("Validating transaction object")
 
         try:
