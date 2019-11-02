@@ -66,7 +66,5 @@ class _CloudFunction:
         :param kwargs:
         :return:
         """
-        auth_header = self._create_auth_header()
 
-        return requests.post(self.func_url, headers=auth_header,
-                             json=payload)
+        return requests.post(self.func_url, json=payload)
