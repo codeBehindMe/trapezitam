@@ -19,19 +19,17 @@
 # along with trapezitam.  
 # If not, see <https://www.gnu.org/licenses/>.
 
-from src.logging_manager.logging_manager import app_logger
-from src.cloud_function.cloud_function import CloudFunctionFactory
-
 import webapp2
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
-from src.utils.misc import unicode_to_utf8_safe
 
-from src.messagedec.messagedec import MessageDeconstructor
+from src.cloud_function.cloud_function import CloudFunctionFactory
 from src.configuration_manager.configuration_manager import \
     ConfigurationManager
-
+from src.logging_manager.logging_manager import app_logger
+from src.messagedec.messagedec import MessageDeconstructor
 from src.transaction.transaction import Transaction
 from src.transaction.transaction import from_json_string
+from src.utils.misc import unicode_to_utf8_safe
 
 APP_CONFIG_FILE_PATH = 'app_config.yaml'
 
@@ -64,7 +62,12 @@ class HandleIncomingMail(InboundMailHandler):
         app_logger.debug(
             "Sending payload: " + gt_func_url)
 
-        tx_o = get_transaction(payload)
+        try:
+            tx_o = get_transaction(payload)
+        except ValueError as e:
+            app_logger.error("Cloud function error {0}".format(e))
+            return
+
         app_logger.debug("Received response: " + str(tx_o.content))
 
         t = Transaction(from_json_string(tx_o.content))
@@ -72,19 +75,20 @@ class HandleIncomingMail(InboundMailHandler):
 
         try:
             t.validate()
-            app_logger.info("Send transaction to be saved in database")
-            st_func_url = app_config['stfurl']
-
-            save_transaction = cf_factory.create_function(st_func_url)
-            st_res = save_transaction(t)
-            if st_res.status_code != 200:
-                app_logger.error(
-                    "Error when inserting transaction to db: {0}".format(
-                        st_res.content))
-                return
-            app_logger.info("Successfully saved transaction to database")
         except ValueError:
             app_logger.error("Invalid Transaction {0}".format(str(t)))
+            return
+
+        app_logger.info("Send transaction to be saved in database")
+        st_func_url = app_config['stfurl']
+
+        save_transaction = cf_factory.create_function(st_func_url)
+        try:
+            _ = save_transaction(t)
+        except ValueError as e:
+            app_logger.error("Error when saving transaction: {0}".format(e))
+            return
+        app_logger.info("Successfully saved transaction to database")
 
 
 app = webapp2.WSGIApplication([HandleIncomingMail.mapping()], debug=True)

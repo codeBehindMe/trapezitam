@@ -20,6 +20,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 import requests
+from google.auth import app_engine
 
 TOKEN_REQUEST_HEADER = {'Metadata-Flavour': 'Google'}
 
@@ -67,4 +68,8 @@ class _CloudFunction:
         :return:
         """
 
-        return requests.post(self.func_url, json=payload)
+        app_engine.Credentials()
+        response = requests.post(self.func_url, json=payload)
+        if response.status_code != 200:
+            raise ValueError("Error response {0}".format(response.content))
+        return response
