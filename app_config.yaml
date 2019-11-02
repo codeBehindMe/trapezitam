@@ -1,6 +1,7 @@
 dev: &dev
   gtfurl: https://asia-east2-test-trapezitam.cloudfunctions.net/GetTransaction
   stfurl: https://asia-east2-test-trapezitam.cloudfunctions.net/SaveTransaction
+  metadata_server_token_url: http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?audience=
 test: &test
   <<: *dev
 prod:
