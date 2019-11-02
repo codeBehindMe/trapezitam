@@ -50,6 +50,7 @@ class _CloudFunction:
         Creates the authorisation header.
         :return:
         """
+        cred = app_engine.Credentials()
         token_request_url = self.metadata_server_token_url + self.func_url
         token_request_headers = TOKEN_REQUEST_HEADER
 
@@ -57,7 +58,7 @@ class _CloudFunction:
                                       headers=token_request_headers)
         jwt = token_response.content.decode('utf-8')
 
-        return {"Authorization": "bearer {0}".format(jwt)}
+        return {"Authorization": "bearer {0}".format(cred.token)}
 
     def __call__(self, payload, **kwargs):
         """
@@ -68,8 +69,8 @@ class _CloudFunction:
         :return:
         """
 
-        app_engine.Credentials()
-        response = requests.post(self.func_url, json=payload)
+        response = requests.post(self.func_url, json=payload,
+                                 header=self._create_auth_header())
         if response.status_code != 200:
             raise ValueError("Error response {0}".format(response.content))
         return response
