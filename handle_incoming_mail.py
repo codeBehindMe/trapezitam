@@ -20,7 +20,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 from src.logging_manager.logging_manager import app_logger
-from src.net.http import post
+from src.cloud_function.cloud_function import CloudFunctionFactory
 
 import webapp2
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
@@ -36,6 +36,8 @@ from src.transaction.transaction import from_json_string
 APP_CONFIG_FILE_PATH = 'app_config.yaml'
 
 app_config = ConfigurationManager(APP_CONFIG_FILE_PATH).get_app_configuration()
+
+cf_factory = CloudFunctionFactory(app_config['metadata_server_token_url'])
 
 
 class HandleIncomingMail(InboundMailHandler):
@@ -58,10 +60,11 @@ class HandleIncomingMail(InboundMailHandler):
         app_logger.info("Sending transaction text for entity extraction")
 
         gt_func_url = app_config['gtfurl']
+        get_transaction = cf_factory.create_function(gt_func_url)
         app_logger.debug(
             "Sending payload: " + gt_func_url)
 
-        tx_o = post(gt_func_url, payload)
+        tx_o = get_transaction(payload)
         app_logger.debug("Received response: " + str(tx_o.content))
 
         t = Transaction(from_json_string(tx_o.content))
@@ -72,13 +75,15 @@ class HandleIncomingMail(InboundMailHandler):
             app_logger.info("Send transaction to be saved in database")
             st_func_url = app_config['stfurl']
 
-            st_res = post(st_func_url, t)
+            save_transaction = cf_factory.create_function(st_func_url)
+            st_res = save_transaction(t)
             if st_res.status_code != 200:
                 app_logger.error(
                     "Error when inserting transaction to db: {0}".format(
                         st_res.content))
+                return
             app_logger.info("Successfully saved transaction to database")
-        except ValueError as v:
+        except ValueError:
             app_logger.error("Invalid Transaction {0}".format(str(t)))
 
 
