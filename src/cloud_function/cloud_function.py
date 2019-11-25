@@ -20,15 +20,23 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 import requests
-from google.auth import app_engine
+from google.cloud import datastore
+from google.appengine.ext import ndb
 
 TOKEN_REQUEST_HEADER = {'Metadata-Flavour': 'Google'}
+AUTH_REFERENCE_ID = 5637476211228672
+
+
+class Key:
+    AuthKey = ndb.StringProperty()
+    KeyType = ndb.StringProperty()
 
 
 class CloudFunctionFactory:
 
-    def __init__(self, metadata_server_token_url):
+    def __init__(self, metadata_server_token_url, devshell_project_id):
         self.metadata_server_toke_url = metadata_server_token_url
+        self.devshell_project_id = devshell_project_id
 
     def create_function(self, function_url):
         """
@@ -36,29 +44,31 @@ class CloudFunctionFactory:
         :param function_url: Url to the cloud function.
         :return:
         """
-        return _CloudFunction(function_url, self.metadata_server_toke_url)
+        return _CloudFunction(function_url, self.metadata_server_toke_url,
+                              self.devshell_project_id)
 
 
 class _CloudFunction:
 
-    def __init__(self, function_url, metadata_server_token_url):
+    def __init__(self, function_url, metadata_server_token_url,
+                 devshell_project_id):
         self.func_url = function_url
         self.metadata_server_token_url = metadata_server_token_url
+        self.devshell_project_id = devshell_project_id
 
     def _create_auth_header(self):
         """
         Creates the authorisation header.
         :return:
         """
-        cred = app_engine.Credentials()
-        token_request_url = self.metadata_server_token_url + self.func_url
-        token_request_headers = TOKEN_REQUEST_HEADER
 
-        token_response = requests.get(token_request_url,
-                                      headers=token_request_headers)
-        jwt = token_response.content.decode('utf-8')
+        dsc = datastore.client.Client(self.devshell_project_id)
+        ds_key = dsc.key("key", AUTH_REFERENCE_ID)
 
-        return {"Authorization": "bearer {0}".format(cred.token)}
+        entity = datastore.Entity(ds_key)
+        auth_key = entity['Auth-Key']
+
+        return {"Auth-Key": auth_key}
 
     def __call__(self, payload, **kwargs):
         """
