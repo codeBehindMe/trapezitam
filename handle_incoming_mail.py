@@ -30,12 +30,14 @@ from src.messagedec.messagedec import MessageDeconstructor
 from src.transaction.transaction import Transaction
 from src.transaction.transaction import from_json_string
 from src.utils.misc import unicode_to_utf8_safe
+from google.appengine.api import memcache
 
 APP_CONFIG_FILE_PATH = 'app_config.yaml'
 
 app_config = ConfigurationManager(APP_CONFIG_FILE_PATH).get_app_configuration()
 
-cf_factory = CloudFunctionFactory(app_config['metadata_server_token_url'])
+cf_factory = CloudFunctionFactory(app_config['metadata_server_token_url'],
+                                  memcache.get('projid'))
 
 
 class HandleIncomingMail(InboundMailHandler):
