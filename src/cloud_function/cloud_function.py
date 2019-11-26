@@ -68,7 +68,7 @@ class _CloudFunction:
         entity = datastore.Entity(ds_key)
         auth_key = entity['Auth-Key']
 
-        return {"Auth-Key": auth_key}
+        return {"Authorization": "Bearer {0}".format(auth_key)}
 
     def __call__(self, payload, **kwargs):
         """
