@@ -21,6 +21,7 @@
 
 import requests
 from google.appengine.ext import ndb
+from src.logging_manager.logging_manager import app_logger
 
 TOKEN_REQUEST_HEADER = {'Metadata-Flavour': 'Google'}
 AUTH_REFERENCE_ID = 5637476211228672
@@ -63,6 +64,8 @@ class _CloudFunction:
 
         auth_key = Key()
         auth_key.get_by_id(AUTH_REFERENCE_ID)
+
+        app_logger.info("Got key: {0}".format(auth_key.AuthKey))
 
         return {"Authorization": "Bearer {0}".format(auth_key.AuthKey)}
 
