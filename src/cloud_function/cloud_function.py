@@ -61,7 +61,6 @@ class _CloudFunction:
         :return:
         """
 
-
         auth_key = Key()
         auth_key.get_by_id(AUTH_REFERENCE_ID)
 
