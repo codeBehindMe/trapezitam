@@ -20,14 +20,13 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 import requests
-from google.cloud import datastore
 from google.appengine.ext import ndb
 
 TOKEN_REQUEST_HEADER = {'Metadata-Flavour': 'Google'}
 AUTH_REFERENCE_ID = 5637476211228672
 
 
-class Key:
+class Key(ndb.Model):
     AuthKey = ndb.StringProperty()
     KeyType = ndb.StringProperty()
 
@@ -62,13 +61,11 @@ class _CloudFunction:
         :return:
         """
 
-        dsc = datastore.client.Client(self.devshell_project_id)
-        ds_key = dsc.key("key", AUTH_REFERENCE_ID)
 
-        entity = datastore.Entity(ds_key)
-        auth_key = entity['Auth-Key']
+        auth_key = Key()
+        auth_key.get_by_id(AUTH_REFERENCE_ID)
 
-        return {"Authorization": "Bearer {0}".format(auth_key)}
+        return {"Authorization": "Bearer {0}".format(auth_key.AuthKey)}
 
     def __call__(self, payload, **kwargs):
         """
