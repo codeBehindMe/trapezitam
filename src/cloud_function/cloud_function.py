@@ -76,7 +76,7 @@ class _CloudFunction:
         """
 
         response = requests.post(self.func_url, json=payload,
-                                 header=self._create_auth_header())
+                                 headers=self._create_auth_header())
         if response.status_code != 200:
             raise ValueError("Error response {0}".format(response.content))
         return response
