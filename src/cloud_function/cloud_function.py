@@ -63,7 +63,7 @@ class _CloudFunction:
         """
 
         auth_key = Key()
-        auth_key.get_by_id(AUTH_REFERENCE_ID)
+        auth_key.get_by_id(Key(AUTH_REFERENCE_ID))
 
         app_logger.info("Got key: {0}".format(auth_key.AuthKey))
 
