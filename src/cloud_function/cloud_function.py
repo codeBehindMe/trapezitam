@@ -27,7 +27,7 @@ TOKEN_REQUEST_HEADER = {'Metadata-Flavour': 'Google'}
 AUTH_REFERENCE_ID = 5637476211228672
 
 
-class Key(ndb.Model):
+class SecKey(ndb.Model):
     AuthKey = ndb.StringProperty()
     KeyType = ndb.StringProperty()
 
@@ -62,8 +62,8 @@ class _CloudFunction:
         :return:
         """
 
-        auth_key = Key()
-        auth_key.get_by_id(Key(AUTH_REFERENCE_ID))
+        auth_key = SecKey()
+        auth_key.get_by_id(AUTH_REFERENCE_ID)
 
         app_logger.info("Got key: {0}".format(auth_key.AuthKey))
 
