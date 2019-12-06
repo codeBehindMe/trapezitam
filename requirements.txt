@@ -6,3 +6,4 @@ urllib3
 pytest
 enum34
 google-cloud-datastore
+requests-toolbelt

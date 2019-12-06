@@ -21,6 +21,7 @@
 
 import webapp2
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
+import requests_toolbelt.adapters.appengine
 
 from src.cloud_function.cloud_function import CloudFunctionFactory
 from src.configuration_manager.configuration_manager import \
@@ -32,6 +33,8 @@ from src.transaction.transaction import from_json_string
 from src.utils.misc import unicode_to_utf8_safe
 from google.appengine.api import memcache
 
+
+requests_toolbelt.adapters.appengine.monkeypatch()
 APP_CONFIG_FILE_PATH = 'app_config.yaml'
 
 app_config = ConfigurationManager(APP_CONFIG_FILE_PATH).get_app_configuration()
