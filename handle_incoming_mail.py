@@ -72,7 +72,7 @@ class HandleIncomingMail(InboundMailHandler):
 
         app_logger.debug("Received response: " + str(tx_o.content))
 
-        t = Transaction(from_json_string(tx_o.content))
+        t = Transaction(from_json_string(tx_o.text))
         app_logger.debug("Validating transaction object")
 
         try:
