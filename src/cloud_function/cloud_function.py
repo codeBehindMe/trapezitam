@@ -24,7 +24,7 @@ from google.appengine.ext import ndb
 from src.logging_manager.logging_manager import app_logger
 
 TOKEN_REQUEST_HEADER = {'Metadata-Flavour': 'Google'}
-AUTH_REFERENCE_ID = 5637476211228672
+AUTH_REFERENCE_ID = "5194620877fd2a6cb2ea948682b171f5"
 
 
 class SecKey(ndb.Model):
@@ -62,12 +62,8 @@ class _CloudFunction:
         :return:
         """
 
-        auth_key = SecKey()
-        auth_key.get_by_id(AUTH_REFERENCE_ID)
 
-        app_logger.info("Got key: {0}".format(auth_key.AuthKey))
-
-        return {"Authorization": "Bearer {0}".format(auth_key.AuthKey)}
+        return {"Authorization": "Bearer {0}".format(AUTH_REFERENCE_ID)}
 
     def __call__(self, payload, **kwargs):
         """
