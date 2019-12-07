@@ -89,7 +89,7 @@ class HandleIncomingMail(InboundMailHandler):
 
         save_transaction = cf_factory.create_function(st_func_url)
         try:
-            _ = save_transaction(t)
+            _ = save_transaction(t.d)
         except ValueError as e:
             app_logger.error("Error when saving transaction: {0}".format(e))
             return
